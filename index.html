@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Bill Count</title>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+     <div>
+          <table align="center">
+               <thead>
+                    <tr>
+                         <th width="150"></th>
+                         <th></th>
+                    </tr>
+               </thead>
+               <tbody id="inputs" >
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Distributor</td>
+                         <td> :- <select name="Distributor" id="Distributor">
+                              <option value="DESCO">DESCO</option>
+                              </select>
+                         </td>
+                    </tr>
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Total Unit</td>
+                         <td>= <input id="tvalue" type="text"><b>kWH/Unit</b></td>
+                    </tr>
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Demand Load</td>
+                         <td>= <input id="dvalue" type="text"><b>kW</b></td>
+                    </tr>
+                    <tr>
+                         <td></td>
+                         <td style="text-align: center;"><button id="btn">Click To Calculate Bill</button></td>
+                    </tr>
+               </tbody>
+               <tbody id="bill">
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Electric Bill</td>
+                         <td>= <input id="ebill" type="text" readonly><b>TK</b></td>
+                    </tr>
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Deamnd Charge</td>
+                         <td>= <input type="text" readonly><b>TK</b></td>
+                    </tr>
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Vat</td>
+                         <td>= <input id="vat" type="text" readonly><b>TK</b></td>
+                    </tr>
+                    <tr>
+                         <td style="font-weight: bold; font-size: 17px;">Total Bill</td>
+                         <td>= <input type="text" readonly><b>TK</b></td>
+                    </tr>
+               </tbody>
+          </table>
+
+          <div style="margin-top: 20px;" align="center" id="show" hidden>
+               <h1 style="color: rgb(161, 161, 26);">DESCO Electricity Bill</h1>
+               <p style="color: rgb(161, 161, 26);">Tariff(>600): 100 x 13.26 = 1326.00 tk</p>
+               <p style="color: rgb(161, 161, 26);">Tariff(401-600): 200 x 11.51 = 2302.00 tk</p>
+               <p style="color: rgb(161, 161, 26);">Tariff(301-400): 100 x 7.34 = 734.00 tk</p>
+               <p style="color: rgb(161, 161, 26);">Tariff(201-300): 100 x 6.95 = 695.00 tk</p>
+               <p style="color: rgb(161, 161, 26);">Tariff(76-200): 125 x 6.63 = 828.75 tk</p>
+               <p style="color: rgb(161, 161, 26);">Tariff(0-75): 75 x 4.85 = 363.75 tk</p>
+          </div>
+     </div>
+     <script>
+         $('#btn').on('click',function(){
+          $('#show').show()
+          const tvalue = $('#tvalue').val();
+          bill = [363.75, 828.75, 695.00, 734.00, 2302.00, 1326.00]
+               if($('#Distributor').val() == 'DESCO')
+               {
+                    if(tvalue<=75){
+                         ebill = tvalue * 4.85;
+                          $('#ebill').val(parseFloat(ebill))
+                          total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+                    else if(tvalue<=200){
+                         num = tvalue - 75;
+                         ebill = num * 6.63;
+                         $('#ebill').val(parseFloat(ebill + parseFloat(bill[0])))
+                         total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+                    else if(tvalue<=300){
+                         num = tvalue - 200;
+                         ebill = num * 6.95;
+                         $('#ebill').val(parseFloat(ebill + parseFloat(bill[0]) + parseFloat(bill[1])))
+                         total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+                    else if(tvalue<=400){
+                         num = tvalue - 300;
+                         ebill = num * 7.34;
+                         $('#ebill').val(parseFloat(ebill + parseFloat(bill[0]) + parseFloat(bill[1]) + parseFloat(bill[2])))
+                         total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+                    else if(tvalue<=600){
+                         num = tvalue - 400;
+                         ebill = num * 11.51;
+                         $('#ebill').val(parseFloat(ebill + parseFloat(bill[0]) + parseFloat(bill[1]) + parseFloat(bill[2]) + parseFloat(bill[3])))
+                         total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+                    else if(tvalue>600){
+                         num = tvalue - 600;
+                         ebill = num * 13.26;
+                         $('#ebill').val(parseFloat(ebill + parseFloat(bill[0]) + parseFloat(bill[1]) + parseFloat(bill[2]) + parseFloat(bill[3]) + parseFloat(bill[4])))
+                         total_ebill = $('#ebill').val();
+                          vat =(total_ebill /100)*5;
+                          $('#vat').val(parseFloat(vat))
+                    }
+               }
+         })  
+     </script>
+</body>
+</html>
